@@ -13,7 +13,7 @@ files = [
   'test/lib/*.js',
   'test/00_base.js',
   'sample.js',
-  './test/*.js'
+  'test/*.js'
 ];
 
 

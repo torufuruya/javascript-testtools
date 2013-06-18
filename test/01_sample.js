@@ -14,4 +14,9 @@ describe('nativeCall', function () {
         expect(template_spy.returnValues[0]).to.eql('cobit-sdk:call/apiName?param={"param_key":"param_value"}&sessionId=nnn&callback=callback');
     });
 
+    it('nativeCall test', function() {
+        var spy = sinon.spy(window, 'nativeCall');
+        window_stub.args[0][1]();
+        expect(spy.called).to.eql(true);
+    });
 });
