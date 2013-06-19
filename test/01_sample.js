@@ -2,6 +2,22 @@ var expect = chai.expect;
 
 describe('nativeCall', function () {
 
+    before(function() {
+        console.log('before');
+    });
+
+    beforeEach(function() {
+        console.log('beforeEach');
+    });
+
+    afterEach(function() {
+        console.log('afterEach');
+    });
+
+    after(function() {
+        console.log('after');
+    });
+
     it('window test', function () {
         expect(window_stub.called).to.eql(true);
         expect(window_stub.args[0][1]).to.be.a('function');
@@ -24,4 +40,5 @@ describe('nativeCall', function () {
         expect(spy.args[0][1]).to.be.a('object');
         expect(spy.args[0][2]).to.be.a('string');
     });
+
 });
