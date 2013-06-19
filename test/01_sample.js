@@ -2,43 +2,45 @@ var expect = chai.expect;
 
 describe('nativeCall', function () {
 
-    before(function() {
-        console.log('before');
+    describe('DOMContentLoaded', function() {
+        it('addEventListerが呼ばれること', function () {
+            expect(window_stub.called).to.eql(true);
+        });
+        it('addEventListerの第2引数が関数であること', function () {
+            expect(window_stub.args[0][1]).to.be.a('function');
+        });
     });
 
-    beforeEach(function() {
-        console.log('beforeEach');
+    describe('template', function() {
+        before(function() {
+            spy = sinon.spy(nativeCall.prototype,'template');
+            window_stub.args[0][1]();
+        });
+
+        it('templateメソッドが呼ばれること', function() {
+            expect(spy.called).to.eql(true);
+        });
+        it('templateメソッドの引数の型が正しいこと', function() {
+            expect(spy.args[0][0]).to.be.a('string');
+            expect(spy.args[0][1]).to.be.a('object');
+        });
+        it('templateメソッドの結果が正しいこと', function() {
+            expect(spy.returnValues[0])
+              .to.eql('cobit-sdk:call/apiName?param={"param_key":"param_value"}&sessionId=nnn&callback=callback');
+        });
     });
 
-    afterEach(function() {
-        console.log('afterEach');
-    });
+    describe('nativeCall', function() {
+        before(function() {
+            spy = sinon.spy(window, 'nativeCall');
+            window_stub.args[0][1]();
+        });
 
-    after(function() {
-        console.log('after');
-    });
-
-    it('window test', function () {
-        expect(window_stub.called).to.eql(true);
-        expect(window_stub.args[0][1]).to.be.a('function');
-    });
-
-    it('template test', function() {
-        var spy = sinon.spy(nativeCall.prototype,'template');
-        window_stub.args[0][1]();
-        expect(spy.called).to.eql(true);
-        expect(spy.args[0][0]).to.be.a('string');
-        expect(spy.args[0][1]).to.be.a('object');
-        expect(spy.returnValues[0]).to.eql('cobit-sdk:call/apiName?param={"param_key":"param_value"}&sessionId=nnn&callback=callback');
-    });
-
-    it('nativeCall test', function() {
-        var spy = sinon.spy(window, 'nativeCall');
-        window_stub.args[0][1]();
-        expect(spy.called).to.eql(true);
-        expect(spy.args[0][0]).to.be.a('string');
-        expect(spy.args[0][1]).to.be.a('object');
-        expect(spy.args[0][2]).to.be.a('string');
+        it('nativeCallの引数が正しいこと', function() {
+            expect(spy.args[0][0]).to.be.a('string');
+            expect(spy.args[0][1]).to.be.a('object');
+            expect(spy.args[0][2]).to.be.a('string');
+        });
     });
 
 });
