@@ -14,7 +14,7 @@ $ npm install -g mocha
 * http://chaijs.com/
 
 ```
-$ npm install -g chai
+$ npm install chai
 ```
 ## Sinon.JS
 * http://sinonjs.org/

@@ -8,10 +8,12 @@ describe('nativeCall', function () {
     });
 
     it('template test', function() {
-        var template_spy = sinon.spy(nativeCall.prototype,'template');
+        var spy = sinon.spy(nativeCall.prototype,'template');
         window_stub.args[0][1]();
-        expect(template_spy.called).to.eql(true);
-        expect(template_spy.returnValues[0]).to.eql('cobit-sdk:call/apiName?param={"param_key":"param_value"}&sessionId=nnn&callback=callback');
+        expect(spy.called).to.eql(true);
+        expect(spy.args[0][0]).to.be.a('string');
+        expect(spy.args[0][1]).to.be.a('object');
+        expect(spy.returnValues[0]).to.eql('cobit-sdk:call/apiName?param={"param_key":"param_value"}&sessionId=nnn&callback=callback');
     });
 
     it('nativeCall test', function() {
