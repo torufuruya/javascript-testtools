@@ -29,8 +29,20 @@ describe('nativeCall', function () {
         });
     });
 
-    describe('templateメソッド', function() {
+    describe('templateメソッドの結果', function() {
         var spy;
+        var url = '%SCHEME%/%APINAME%?param=%PARAM%&sessionId=%SESSIONID%&callback=%CALLBACK%';
+        function getData(apiName, params, callback) {
+            var data = {
+                'SCHEME' : 'cobit-sdk:call',
+                'APINAME' : apiName,
+                'PARAM' : JSON.stringify(params),
+                'SESSIONID' : 'nnn',
+                'CALLBACK' : callback
+            };
+            return data;
+        }
+
         before(function() {
             spy = sinon.spy(nativeCall.prototype,'template');
         });
@@ -40,28 +52,26 @@ describe('nativeCall', function () {
         });
 
         it('test1', function() {
-            new nativeCall('apiName', {"param_key":"param_value"}, 'callback');
+            var data = getData('apiName', {"param_key":"param_value"},'callback');
+            spy(url, data);
             expect(spy.returnValues[0])
             .to.eql('cobit-sdk:call/apiName?param={"param_key":"param_value"}&sessionId=nnn&callback=callback');
         });
 
         it('test2', function() {
-            new nativeCall('CALLBACK', {"param_key":"param_value"}, 'SCHEME');
+            var data = getData('CALLBACK', {"param_key":"SCHEME"},'callback');
+            spy(url, data);
             expect(spy.returnValues[1])
-            .to.eql('cobit-sdk:call/CALLBACK?param={"param_key":"param_value"}&sessionId=nnn&callback=SCHEME');
+            .to.eql('cobit-sdk:call/CALLBACK?param={"param_key":"SCHEME"}&sessionId=nnn&callback=callback');
         });
 
         it('test3', function() {
-            new nativeCall('', {"param_key":"param_value"}, '');
+            var data = getData('', {"":""},'');
+            spy(url, data);
             expect(spy.returnValues[2])
-            .to.eql('cobit-sdk:call/?param={"param_key":"param_value"}&sessionId=nnn&callback=');
+            .to.eql('cobit-sdk:call/?param={"":""}&sessionId=nnn&callback=');
         });
 
-        it('test4', function() {
-            new nativeCall('null', {"param_key":"param_value"}, 'null');
-            expect(spy.returnValues[3])
-            .to.eql('cobit-sdk:call/null?param={"param_key":"param_value"}&sessionId=nnn&callback=null');
-        });
     });
 
 });
