@@ -1,6 +1,9 @@
 function nativeCall(apiName, params, callback) {
     this.counter.increment();
     var sessionId = this.counter.value();
+    var callbackList = new Array();
+    callbackList.sessionId = callback;
+
     var param = JSON.stringify(params);
     var url = '%SCHEME%/%APINAME%?param=%PARAM%&sessionId=%SESSIONID%&callback=%CALLBACK%';
 
@@ -13,7 +16,13 @@ function nativeCall(apiName, params, callback) {
     };
 
     var result = this.template(url, data);
-    window.location.href = result;
+    //window.location.href = result;
+
+    fromCallback(sessionId, callback);
+
+    function fromCallback(sessionId, callback) {
+        callbackList.sessionId();
+    };
 };
 
 nativeCall.prototype.template = function(url, params) {
@@ -36,10 +45,6 @@ nativeCall.prototype.counter = (function() {
   }
 })();
 
-nativeCall.prototype.fromCallback = function(sessionId, callback) {
-    callback();
-};
-
 window.addEventListener('DOMContentLoaded', function(){
-    new nativeCall('apiName', {"param_key":"param_value"},function(){console.log('callback');});
+    new nativeCall('apiName', {"param_key":"param_value"}, function(){console.log('callback');});
 });
