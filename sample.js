@@ -1,5 +1,6 @@
 var nativeCall = function(apiName, params, callback) {
-    var sessionId = 'nnn'; //todo: sessionIdの生成・管理
+    this.counter.increment();
+    var sessionId = this.counter.value();
     var param = JSON.stringify(params);
     var url = '%SCHEME%/%APINAME%?param=%PARAM%&sessionId=%SESSIONID%&callback=%CALLBACK%';
 
@@ -12,8 +13,7 @@ var nativeCall = function(apiName, params, callback) {
     };
 
     var result = this.template(url, data);
-
-    return result;
+    window.location.href = result;
 
 };
 
@@ -24,6 +24,19 @@ nativeCall.prototype.template = function(url, params) {
     });
     return result;
 };
+
+nativeCall.prototype.counter = (function() {
+  var privateCounter = 0;
+
+  return {
+    increment: function() {
+      privateCounter++;
+    },
+    value: function() {
+      return privateCounter;
+    }
+  }
+})();
 
 window.addEventListener('DOMContentLoaded', function(){
     new nativeCall('apiName', {"param_key":"param_value"},'callback');
