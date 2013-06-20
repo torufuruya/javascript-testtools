@@ -1,4 +1,4 @@
-var nativeCall = function(apiName, params, callback) {
+function nativeCall(apiName, params, callback) {
     this.counter.increment();
     var sessionId = this.counter.value();
     var param = JSON.stringify(params);
@@ -14,7 +14,6 @@ var nativeCall = function(apiName, params, callback) {
 
     var result = this.template(url, data);
     window.location.href = result;
-
 };
 
 nativeCall.prototype.template = function(url, params) {
@@ -27,16 +26,19 @@ nativeCall.prototype.template = function(url, params) {
 
 nativeCall.prototype.counter = (function() {
   var privateCounter = 0;
-
   return {
-    increment: function() {
-      privateCounter++;
-    },
-    value: function() {
-      return privateCounter;
-    }
+      increment: function() {
+          privateCounter++;
+      },
+      value: function() {
+          return privateCounter;
+      }
   }
 })();
+
+function fromCallback(sessionId, callback) {
+    callback();
+};
 
 window.addEventListener('DOMContentLoaded', function(){
     new nativeCall('apiName', {"param_key":"param_value"},'callback');

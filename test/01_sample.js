@@ -81,4 +81,23 @@ describe('nativeCall', function () {
 
     });
 
+    describe('counterメソッド', function() {
+        var spy;
+        before(function() {
+            spy = sinon.spy(nativeCall.prototype.counter, 'value');
+        });
+
+        after(function() {
+            spy.restore();
+        });
+        it("nativeCallが初期化されるたびカウントも増加する", function() {
+            //todo nativeCallの初期化のテストでnativeCallを1度初期化しているため2からスタートしてしまってる
+            window_stub.args[0][1]();
+            expect(spy.returnValues[0],'cout1').to.eql(2);
+            window_stub.args[0][1]();
+            expect(spy.returnValues[1],'count2').to.eql(3);
+            window_stub.args[0][1]();
+            expect(spy.returnValues[2],'count3').to.eql(4);
+        });
+    });
 });
