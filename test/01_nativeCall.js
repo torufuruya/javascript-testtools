@@ -17,7 +17,6 @@ describe('nativeCall', function () {
             spy = sinon.spy(window, 'nativeCall');
             window_stub.args[0][1]();
         });
-
         after(function() {
             spy.restore();
         });
@@ -25,7 +24,7 @@ describe('nativeCall', function () {
         it('引数の型が正しいこと', function() {
             expect(spy.args[0][0]).to.be.a('string');
             expect(spy.args[0][1]).to.be.a('object');
-            expect(spy.args[0][2]).to.be.a('string');
+            expect(spy.args[0][2]).to.be.a('function');
         });
     });
 
@@ -57,28 +56,24 @@ describe('nativeCall', function () {
             expect(spy.returnValues[0])
             .to.eql('cobit-sdk:call/apiName?param={"param_key":"param_value"}&sessionId=nnn&callback=callback');
         });
-
         it('test2', function() {
             var data = getData('CALLBACK', {"param_key":"SCHEME"},'callback');
             spy(url, data);
             expect(spy.returnValues[1])
             .to.eql('cobit-sdk:call/CALLBACK?param={"param_key":"SCHEME"}&sessionId=nnn&callback=callback');
         });
-
         it('test3', function() {
             var data = getData('%CALLBACK%', {"param_key":"%SCHEME%"},'callback');
             spy(url, data);
             expect(spy.returnValues[2])
             .to.eql('cobit-sdk:call/%CALLBACK%?param={"param_key":"%SCHEME%"}&sessionId=nnn&callback=callback');
         });
-
         it('test4', function() {
             var data = getData('', {"":""},'');
             spy(url, data);
             expect(spy.returnValues[3])
             .to.eql('cobit-sdk:call/?param={"":""}&sessionId=nnn&callback=');
         });
-
     });
 
     describe('counterメソッド', function() {
@@ -86,18 +81,19 @@ describe('nativeCall', function () {
         before(function() {
             spy = sinon.spy(nativeCall.prototype.counter, 'value');
         });
-
         after(function() {
             spy.restore();
         });
+
         it("nativeCallが初期化されるたびカウントも増加する", function() {
             //todo nativeCallの初期化のテストでnativeCallを1度初期化しているため2からスタートしてしまってる
             window_stub.args[0][1]();
-            expect(spy.returnValues[0],'cout1').to.eql(2);
+            expect(spy.returnValues[0],'count1').to.eql(2);
             window_stub.args[0][1]();
             expect(spy.returnValues[1],'count2').to.eql(3);
             window_stub.args[0][1]();
             expect(spy.returnValues[2],'count3').to.eql(4);
         });
     });
+
 });

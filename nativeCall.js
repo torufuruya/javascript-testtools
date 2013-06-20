@@ -36,10 +36,10 @@ nativeCall.prototype.counter = (function() {
   }
 })();
 
-function fromCallback(sessionId, callback) {
+nativeCall.prototype.fromCallback = function(sessionId, callback) {
     callback();
 };
 
 window.addEventListener('DOMContentLoaded', function(){
-    new nativeCall('apiName', {"param_key":"param_value"},'callback');
+    new nativeCall('apiName', {"param_key":"param_value"},function(){console.log('callback');});
 });
