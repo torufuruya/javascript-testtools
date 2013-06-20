@@ -66,9 +66,16 @@ describe('nativeCall', function () {
         });
 
         it('test3', function() {
-            var data = getData('', {"":""},'');
+            var data = getData('%CALLBACK%', {"param_key":"%SCHEME%"},'callback');
             spy(url, data);
             expect(spy.returnValues[2])
+            .to.eql('cobit-sdk:call/%CALLBACK%?param={"param_key":"%SCHEME%"}&sessionId=nnn&callback=callback');
+        });
+
+        it('test4', function() {
+            var data = getData('', {"":""},'');
+            spy(url, data);
+            expect(spy.returnValues[3])
             .to.eql('cobit-sdk:call/?param={"":""}&sessionId=nnn&callback=');
         });
 
