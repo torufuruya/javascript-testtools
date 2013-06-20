@@ -1,8 +1,7 @@
 function nativeCall(apiName, params, callback) {
-    this.counter.increment();
-    var sessionId = this.counter.value();
-    var callbackList = new Array();
-    callbackList.sessionId = callback;
+    this.sessionId = this.counter();
+    this.callbackList = new Array();
+    this.callbackList.sessionId = callback;
 
     var param = JSON.stringify(params);
     var url = '%SCHEME%/%APINAME%?param=%PARAM%&sessionId=%SESSIONID%&callback=%CALLBACK%';
@@ -11,19 +10,20 @@ function nativeCall(apiName, params, callback) {
         'SCHEME' : 'cobit-sdk:call',
         'APINAME' : apiName,
         'PARAM' : param,
-        'SESSIONID' : sessionId,
+        'SESSIONID' : this.sessionId,
         'CALLBACK' : callback
     };
 
     var result = this.template(url, data);
     //window.location.href = result;
 
-    fromCallback(sessionId, callback);
-
-    function fromCallback(sessionId, callback) {
-        callbackList.sessionId();
-    };
+    //this.fromCallback(this.sessionId);
 };
+
+nativeCall.prototype.counter = (function() {
+    var count = 0;
+    return function() {return ++count};
+})();
 
 nativeCall.prototype.template = function(url, params) {
     var result = '';
@@ -33,17 +33,9 @@ nativeCall.prototype.template = function(url, params) {
     return result;
 };
 
-nativeCall.prototype.counter = (function() {
-  var privateCounter = 0;
-  return {
-      increment: function() {
-          privateCounter++;
-      },
-      value: function() {
-          return privateCounter;
-      }
-  }
-})();
+nativeCall.prototype.fromCallback = function(sessionId) {
+    return this.callbackList.sessionId();
+}
 
 window.addEventListener('DOMContentLoaded', function(){
     new nativeCall('apiName', {"param_key":"param_value"}, function(){console.log('callback');});

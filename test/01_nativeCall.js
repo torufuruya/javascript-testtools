@@ -79,20 +79,44 @@ describe('nativeCall', function () {
     describe('counterメソッド', function() {
         var spy;
         before(function() {
-            spy = sinon.spy(nativeCall.prototype.counter, 'value');
+            spy = sinon.spy(nativeCall.prototype, 'counter');
         });
         after(function() {
             spy.restore();
         });
 
         it("nativeCallが初期化されるたびカウントも増加する", function() {
-            //todo nativeCallの初期化のテストでnativeCallを1度初期化しているため2からスタートしてしまってる
+            //todo nativeCallの初期化のテストで1度初期化しているため2からスタートしてしまってる？
             window_stub.args[0][1]();
             expect(spy.returnValues[0],'count1').to.eql(2);
             window_stub.args[0][1]();
             expect(spy.returnValues[1],'count2').to.eql(3);
             window_stub.args[0][1]();
             expect(spy.returnValues[2],'count3').to.eql(4);
+        });
+    });
+
+    describe('fromCallbackメソッド', function() {
+        var spy;
+        before(function() {
+            spy = sinon.spy(nativeCall.prototype, 'fromCallback');
+        });
+        after(function() {
+            spy.restore();
+        });
+
+        it("test1", function() {
+            var nc = new nativeCall('', {"":""}, function(){return 'test1';});
+            //todo sessionIdが5
+            nc.fromCallback(5);
+            expect(spy.returnValues[0]).to.eql('test1');
+        });
+
+        it("test2", function() {
+            var nc = new nativeCall('', {"":""}, function(){return 'test2';});
+            //todo sessionIdが6
+            nc.fromCallback(6);
+            expect(spy.returnValues[1]).to.eql('test2');
         });
     });
 
