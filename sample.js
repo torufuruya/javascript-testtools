@@ -19,20 +19,9 @@ var nativeCall = function(apiName, params, callback) {
 
 nativeCall.prototype.template = function(url, params) {
     var result = '';
-    while (url.match(/%\w+%/)) {
-        // 'hoge%huga%foo%huga%';
-        var match = url.match(/^([\s\S]*?)%(\w+)%([\s\S]*)/);
-        // hoge
-        result += match[1];
-        // %huga%
-        var key = match[2];
-        // foo%huga%
-        var url = match[3];
-
-        if (key in params) {
-            result += params[key];
-        }
-    }
+    result = url.replace(/%(\w+)%/g, function(str, p1) {
+        return params[p1] ? params[p1] : '';
+    });
     return result;
 };
 
