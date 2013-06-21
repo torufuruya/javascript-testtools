@@ -109,19 +109,14 @@ describe('nativeCall', function () {
             var nc1 = new nativeCall('', {"":""}, function(){return 'test1';});
             var nc2 = new nativeCall('', {"":""}, function(){return 'test2';});
             var nc3 = new nativeCall('', {"":""}, function(){return 'test3';});
-            nc1.fromCallback.execute(nc1.sessionId);
+            nc1.fromCallback.execute(nc1.sessionId, {"test1":"test1"});
             expect(spy.returnValues[0]).to.eql('test1');
 
-            nc2.fromCallback.execute(nc2.sessionId);
+            nc2.fromCallback.execute(nc2.sessionId, {"test2":"test2"});
             expect(spy.returnValues[1]).to.eql('test2');
 
-            nc3.fromCallback.execute(nc3.sessionId);
+            nc3.fromCallback.execute(nc3.sessionId, {"test3":"test3"});
             expect(spy.returnValues[2]).to.eql('test3');
-        });
-        it("グローバル変数ncが参照できる", function() {
-            window_stub.args[0][1]();
-            nc.fromCallback.execute(nc.sessionId, {});
-            expect(spy.returnValues[3]).to.eql('callback');
         });
     });
 

@@ -1,3 +1,5 @@
+var nc;
+
 function nativeCall(apiName, params, callback) {
     this.sessionId = this.counter();
     this.fromCallback.register(this.sessionId, callback);
@@ -13,6 +15,7 @@ function nativeCall(apiName, params, callback) {
     };
 
     var result = this.template(url, data);
+    nc = this;
     //window.location.href = result;
 
     //this.fromCallback.execute(this.sessionId);
@@ -38,11 +41,12 @@ nativeCall.prototype.fromCallback = (function() {
             callbacks[sessionId] = callback;
         },
         execute : function(sessionId, params) {
+            var params = JSON.stringify(params);
             return callbacks[sessionId](params);
         }
     }
 })();
 
 window.addEventListener('DOMContentLoaded', function(){
-    nc = new nativeCall('apiName', {"param_key":"param_value"}, function(){return 'callback';});
+    new nativeCall('apiName', {"param_key":"param_value"}, function(){return 'callback';});
 });
