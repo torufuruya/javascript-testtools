@@ -118,6 +118,11 @@ describe('nativeCall', function () {
             nc3.fromCallback.execute(nc3.sessionId);
             expect(spy.returnValues[2]).to.eql('test3');
         });
+        it("グローバル変数ncが参照できる", function() {
+            window_stub.args[0][1]();
+            nc.fromCallback.execute(nc.sessionId, {});
+            expect(spy.returnValues[3]).to.eql('callback');
+        });
     });
 
 });
