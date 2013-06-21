@@ -107,15 +107,13 @@ describe('nativeCall', function () {
 
         it("test1", function() {
             var nc = new nativeCall('', {"":""}, function(){return 'test1';});
-            //todo sessionIdが5
-            nc.fromCallback(5);
+            nc.fromCallback(nc.sessionId);
             expect(spy.returnValues[0]).to.eql('test1');
         });
 
         it("test2", function() {
             var nc = new nativeCall('', {"":""}, function(){return 'test2';});
-            //todo sessionIdが6
-            nc.fromCallback(6);
+            nc.fromCallback(nc.sessionId);
             expect(spy.returnValues[1]).to.eql('test2');
         });
     });
