@@ -16,7 +16,7 @@ function nativeCall(apiName, params, callback) {
     var result = this.template(url, data);
     //window.location.href = result;
 
-    //this.fromCallback.onOpen(this.sessionId);
+    //this.fromCallback.execute(this.sessionId);
 };
 
 nativeCall.prototype.counter = (function() {
@@ -38,8 +38,8 @@ nativeCall.prototype.fromCallback = (function() {
         register : function(sessionId, callback) {
             callbacks[sessionId] = callback;
         },
-        onOpen : function(sessionId) {
-            callbacks[sessionId]();
+        execute : function(sessionId) {
+            return callbacks[sessionId]();
         }
     }
 })();

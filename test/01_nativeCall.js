@@ -99,22 +99,24 @@ describe('nativeCall', function () {
     describe('fromCallbackメソッド', function() {
         var spy;
         before(function() {
-            spy = sinon.spy(nativeCall.prototype, 'fromCallback');
+            spy = sinon.spy(nativeCall.prototype.fromCallback, 'execute');
         });
         after(function() {
             spy.restore();
         });
 
-        it("test1", function() {
-            var nc = new nativeCall('', {"":""}, function(){return 'test1';});
-            nc.fromCallback(nc.sessionId);
+        it("引数で指定したコールバックが登録、実行できる", function() {
+            var nc1 = new nativeCall('', {"":""}, function(){return 'test1';});
+            var nc2 = new nativeCall('', {"":""}, function(){return 'test2';});
+            var nc3 = new nativeCall('', {"":""}, function(){return 'test3';});
+            nc1.fromCallback.execute(nc1.sessionId);
             expect(spy.returnValues[0]).to.eql('test1');
-        });
 
-        it("test2", function() {
-            var nc = new nativeCall('', {"":""}, function(){return 'test2';});
-            nc.fromCallback(nc.sessionId);
+            nc2.fromCallback.execute(nc2.sessionId);
             expect(spy.returnValues[1]).to.eql('test2');
+
+            nc3.fromCallback.execute(nc3.sessionId);
+            expect(spy.returnValues[2]).to.eql('test3');
         });
     });
 
