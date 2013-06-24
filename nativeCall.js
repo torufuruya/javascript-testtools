@@ -8,7 +8,7 @@ var nativeCall = (function () {
 
         var _params = JSON.stringify(params);
         var _data = {
-            'SCHEME' : 'cobit-sdk:call',
+            'SCHEME' : 'hoge-sdk:call',
             'APINAME' : apiName,
             'PARAM' : _params,
             'SESSIONID' : this.sessionId,

@@ -45,7 +45,7 @@ describe('nativeCall', function () {
 
         function getData(apiName, params, callback) {
             return data = {
-                'SCHEME' : 'cobit-sdk:call',
+                'SCHEME' : 'hoge-sdk:call',
                 'APINAME' : apiName,
                 'PARAM' : JSON.stringify(params),
                 'SESSIONID' : 'nnn',
@@ -54,10 +54,10 @@ describe('nativeCall', function () {
         }
 
         var expected = [
-            'cobit-sdk:call/apiName?param={"param_key":"param_value"}&sessionId=nnn&callback=function (){}',
-            'cobit-sdk:call/CALLBACK?param={"param_key":"SCHEME"}&sessionId=nnn&callback=function (){}',
-            'cobit-sdk:call/%CALLBACK%?param={"param_key":"%SCHEME%"}&sessionId=nnn&callback=function (){}',
-            'cobit-sdk:call/?param={"":""}&sessionId=nnn&callback='
+            'hoge-sdk:call/apiName?param={"param_key":"param_value"}&sessionId=nnn&callback=function (){}',
+            'hoge-sdk:call/CALLBACK?param={"param_key":"SCHEME"}&sessionId=nnn&callback=function (){}',
+            'hoge-sdk:call/%CALLBACK%?param={"param_key":"%SCHEME%"}&sessionId=nnn&callback=function (){}',
+            'hoge-sdk:call/?param={"":""}&sessionId=nnn&callback='
         ];
     });
 
