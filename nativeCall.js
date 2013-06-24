@@ -1,13 +1,11 @@
 var nativeCall = (function () {
-    //private static var
     var _count = 0;
     var _callbacks = {};
-    //constructor
+
     function nativeCall (apiName, params, callback) {
         this.sessionId = ++_count;
         _callbacks[this.sessionId] = callback;
 
-        //private instance var
         var _params = JSON.stringify(params);
         var _data = {
             'SCHEME' : 'cobit-sdk:call',
@@ -22,7 +20,6 @@ var nativeCall = (function () {
         this.locate = function (url) { window.location.href = url; }
     }
 
-    //public prototype method
     nativeCall.prototype.template = function(params) {
         var url = '%SCHEME%/%APINAME%?param=%PARAM%&sessionId=%SESSIONID%&callback=%CALLBACK%';
         var result = '';
@@ -32,7 +29,6 @@ var nativeCall = (function () {
         return result;
     };
 
-    //public static method
     nativeCall.fromCallback = function(sessionId, params) {
         var params = JSON.stringify(params);
         return _callbacks[sessionId](params);
