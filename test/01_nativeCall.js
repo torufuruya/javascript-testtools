@@ -1,4 +1,5 @@
 var expect = chai.expect;
+var assert = chai.assert;
 
 describe('nativeCall', function () {
 
@@ -81,10 +82,8 @@ describe('nativeCall', function () {
             var nc1 = new nativeCall('', {"":""}, function(){});
             var nc2 = new nativeCall('', {"":""}, function(){});
             var nc3 = new nativeCall('', {"":""}, function(){});
-            //todo nativeCallの初期化のテストで1度初期化しているため2からスタートしてしまってる？
-            expect(nc1._sessionId,'count1').to.eql(2);
-            expect(nc2._sessionId,'count2').to.eql(3);
-            expect(nc3._sessionId,'count3').to.eql(4);
+            assert(nc2._sessionId > nc1._sessionId);
+            assert(nc3._sessionId > nc2._sessionId);
         });
     });
 
