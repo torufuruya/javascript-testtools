@@ -43,7 +43,7 @@ describe('nativeCall', function () {
         }
 
         before(function() {
-            spy = sinon.spy(nativeCall.prototype,'template');
+            spy = sinon.spy(nativeCall.prototype, 'template');
         });
 
         after(function() {
@@ -76,30 +76,22 @@ describe('nativeCall', function () {
         });
     });
 
-    describe('counterメソッド', function() {
-        var spy;
-        before(function() {
-            spy = sinon.spy(nativeCall.prototype, 'counter');
-        });
-        after(function() {
-            spy.restore();
-        });
-
-        it("nativeCallが初期化されるたびカウントも増加する", function() {
+    describe('sessionId', function() {
+        it("nativeCallが初期化されるたびsessionIdがカウントアップする", function() {
+            var nc1 = new nativeCall('', {"":""}, function(){});
+            var nc2 = new nativeCall('', {"":""}, function(){});
+            var nc3 = new nativeCall('', {"":""}, function(){});
             //todo nativeCallの初期化のテストで1度初期化しているため2からスタートしてしまってる？
-            window_stub.args[0][1]();
-            expect(spy.returnValues[0],'count1').to.eql(2);
-            window_stub.args[0][1]();
-            expect(spy.returnValues[1],'count2').to.eql(3);
-            window_stub.args[0][1]();
-            expect(spy.returnValues[2],'count3').to.eql(4);
+            expect(nc1._sessionId,'count1').to.eql(2);
+            expect(nc2._sessionId,'count2').to.eql(3);
+            expect(nc3._sessionId,'count3').to.eql(4);
         });
     });
 
     describe('fromCallbackメソッド', function() {
         var spy;
         before(function() {
-            spy = sinon.spy(nativeCall.prototype.fromCallback, 'execute');
+            spy = sinon.spy(nativeCall, 'fromCallback');
         });
         after(function() {
             spy.restore();
@@ -109,14 +101,14 @@ describe('nativeCall', function () {
             var nc1 = new nativeCall('', {"":""}, function(){return 'test1';});
             var nc2 = new nativeCall('', {"":""}, function(){return 'test2';});
             var nc3 = new nativeCall('', {"":""}, function(){return 'test3';});
-            nc1.fromCallback.execute(nc1.sessionId, {"test1":"test1"});
-            expect(spy.returnValues[0]).to.eql('test1');
+            nativeCall.fromCallback(nc1._sessionId, {"test1":"test1"});
+            expect(spy.returnValues[0], 'test1').to.eql('test1');
 
-            nc2.fromCallback.execute(nc2.sessionId, {"test2":"test2"});
-            expect(spy.returnValues[1]).to.eql('test2');
+            nativeCall.fromCallback(nc2._sessionId, {"test2":"test2"});
+            expect(spy.returnValues[1], 'test2').to.eql('test2');
 
-            nc3.fromCallback.execute(nc3.sessionId, {"test3":"test3"});
-            expect(spy.returnValues[2]).to.eql('test3');
+            nativeCall.fromCallback(nc3._sessionId, {"test3":"test3"});
+            expect(spy.returnValues[2], 'test3').to.eql('test3');
         });
     });
 
