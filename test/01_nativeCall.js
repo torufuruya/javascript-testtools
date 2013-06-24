@@ -31,7 +31,6 @@ describe('nativeCall', function () {
 
     describe('templateメソッドの結果', function() {
         var spy;
-        var url = '%SCHEME%/%APINAME%?param=%PARAM%&sessionId=%SESSIONID%&callback=%CALLBACK%';
         function getData(apiName, params, callback) {
             var data = {
                 'SCHEME' : 'cobit-sdk:call',
@@ -53,25 +52,25 @@ describe('nativeCall', function () {
 
         it('test1', function() {
             var data = getData('apiName', {"param_key":"param_value"},'callback');
-            spy(url, data);
+            spy(data);
             expect(spy.returnValues[0])
             .to.eql('cobit-sdk:call/apiName?param={"param_key":"param_value"}&sessionId=nnn&callback=callback');
         });
         it('test2', function() {
             var data = getData('CALLBACK', {"param_key":"SCHEME"},'callback');
-            spy(url, data);
+            spy(data);
             expect(spy.returnValues[1])
             .to.eql('cobit-sdk:call/CALLBACK?param={"param_key":"SCHEME"}&sessionId=nnn&callback=callback');
         });
         it('test3', function() {
             var data = getData('%CALLBACK%', {"param_key":"%SCHEME%"},'callback');
-            spy(url, data);
+            spy(data);
             expect(spy.returnValues[2])
             .to.eql('cobit-sdk:call/%CALLBACK%?param={"param_key":"%SCHEME%"}&sessionId=nnn&callback=callback');
         });
         it('test4', function() {
             var data = getData('', {"":""},'');
-            spy(url, data);
+            spy(data);
             expect(spy.returnValues[3])
             .to.eql('cobit-sdk:call/?param={"":""}&sessionId=nnn&callback=');
         });
@@ -82,8 +81,8 @@ describe('nativeCall', function () {
             var nc1 = new nativeCall('', {"":""}, function(){});
             var nc2 = new nativeCall('', {"":""}, function(){});
             var nc3 = new nativeCall('', {"":""}, function(){});
-            assert(nc2._sessionId > nc1._sessionId);
-            assert(nc3._sessionId > nc2._sessionId);
+            assert(nc2.sessionId > nc1.sessionId);
+            assert(nc3.sessionId > nc2.sessionId);
         });
     });
 
@@ -100,13 +99,13 @@ describe('nativeCall', function () {
             var nc1 = new nativeCall('', {"":""}, function(){return 'test1';});
             var nc2 = new nativeCall('', {"":""}, function(){return 'test2';});
             var nc3 = new nativeCall('', {"":""}, function(){return 'test3';});
-            nativeCall.fromCallback(nc1._sessionId, {"test1":"test1"});
+            nativeCall.fromCallback(nc1.sessionId, {"test1":"test1"});
             expect(spy.returnValues[0], 'test1').to.eql('test1');
 
-            nativeCall.fromCallback(nc2._sessionId, {"test2":"test2"});
+            nativeCall.fromCallback(nc2.sessionId, {"test2":"test2"});
             expect(spy.returnValues[1], 'test2').to.eql('test2');
 
-            nativeCall.fromCallback(nc3._sessionId, {"test3":"test3"});
+            nativeCall.fromCallback(nc3.sessionId, {"test3":"test3"});
             expect(spy.returnValues[2], 'test3').to.eql('test3');
         });
     });
