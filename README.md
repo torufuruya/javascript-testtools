@@ -5,7 +5,7 @@
 $ npm install -g karma
 ```
 ## Mocha
-* http://visionmedia.github.io/mocha/
+* http://mochajs.org/
 
 ```
 $ npm install -g mocha
